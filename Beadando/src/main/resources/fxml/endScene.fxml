@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="383.0" prefWidth="635.0" styleClass="endcss" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.inf.unideb.beadando.QuizEndController">
+    <stylesheets>
+        <URL value="@/styles/endStyle.css" />
+    </stylesheets>
+   <children>
+        <ImageView fx:id="imagegrats" fitHeight="300.0" fitWidth="460.0" layoutX="26.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="Images/congrats.png" />
+         </image>
+      </ImageView>
+      <Button id="exitButton" fx:id="exitButton" layoutX="415.0" layoutY="105.0" mnemonicParsing="false" onAction="#endGame" prefHeight="56.0" prefWidth="147.0" text="exit" />
+      <Label id="textScoreLabel" fx:id="textScoreLabel" layoutX="137.0" layoutY="17.0" prefHeight="32.0" prefWidth="401.0" text="CONGRATULATIONS!!!" textOverrun="CLIP" />
+      <Label id="scoreLabel" fx:id="scoreLabel" layoutX="27.0" layoutY="64.0" prefHeight="32.0" prefWidth="383.0" text="score" textOverrun="CLIP" />
+      <Button id="againButton" fx:id="againButton" layoutX="417.0" layoutY="214.0" mnemonicParsing="false" onAction="#again" prefHeight="56.0" prefWidth="147.0" text="play again" />
+   </children>
+</AnchorPane>

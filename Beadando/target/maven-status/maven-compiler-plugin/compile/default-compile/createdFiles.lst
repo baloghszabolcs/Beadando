@@ -1,0 +1,9 @@
+hu/inf/unideb/beadando/model/Quiz.class
+hu/inf/unideb/beadando/model/QuestionModel.class
+hu/inf/unideb/beadando/model/ParserXml.class
+hu/inf/unideb/beadando/QuizEndController.class
+hu/inf/unideb/beadando/model/CountDown.class
+hu/inf/unideb/beadando/QuizViewController.class
+hu/inf/unideb/beadando/model/TestModel.class
+hu/inf/unideb/beadando/QuizStartController.class
+hu/inf/unideb/beadando/MainApp.class
