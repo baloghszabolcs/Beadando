@@ -1,6 +1,6 @@
 package hu.inf.unideb.beadando;
 
-import hu.inf.unideb.beadando.model.CountDown;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -13,10 +13,8 @@ import hu.inf.unideb.beadando.model.TestModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,7 +23,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 
 
-// a kisorsoltszamok size-at kell valtoztatni meg majd amennyit sorsoljon ki  randomNumberSize;
 
 public class QuizViewController implements Initializable {
       
@@ -54,7 +51,7 @@ public class QuizViewController implements Initializable {
 
     private  int questionIterator=0;
     private int randomIterator=0;
-//    private int MAX_TIME_SEC = 180;
+//   private int MAX_TIME_SEC = 180;
 
     private int correctIndex= theTest.getQuestions().get(questionIterator).getCorrectAnswer();
 
@@ -63,9 +60,11 @@ private final int randomNumbersSize = 10;//theTest.getNumberOfQuestions();
     public int getRandomNumbersSize() {
         return randomNumbersSize;
     }
+   
+
+
 private ArrayList<Integer> randomSzamok = new ArrayList<>(randomNumbersSize);
 private void randomArrayGenerator(){
-    
     Random randomgen = new Random();
     while (randomSzamok.size() < randomNumbersSize) {
         int rand = randomgen.nextInt(40);
@@ -74,47 +73,8 @@ private void randomArrayGenerator(){
         }
     }
 //    System.out.println(randomSzamok);  debug
-
 }
-  
-//private CountDown cd = new CountDown(12);
-    
-//    public void handleTimeLbl() {
-//        
-//        class Tasker extends Thread{
-//            public void run(){
-//                for(;;) {
-//                     try {
-//                    TimeUnit.SECONDS.sleep(1);
-//                    cd.decreaseDuration();
-//                    
-//Platform.runLater(new Runnable() {
-//    @Override
-//    public void run() {
-//        TimeLbl.setText(cd.showDuration());
-//        interrupt();
-//    }
-//});
-//                        if (cd.showDuration().equals("00:00")){
-//                            break;
-//                            
-//                            
-////                            Platform.exit();
-//                        }
-//
-//                
-//                    }catch (InterruptedException ie) {
-//                        ie.getMessage();
-//                    }
-//                }
-//                interrupt();
-//            }
-//        
-//      }
-////        exit();
-//Tasker run1 = new Tasker();
-//run1.start();
-//    }
+
 
     
     private final double progress = 1.000000/randomNumbersSize;//theTest.getNumberOfQuestions();
@@ -155,10 +115,10 @@ private void randomArrayGenerator(){
             }
         } else {
             ok = true;
-//            System.out.println("baj van bugos a vegen");
+
         }
         
-        System.out.println(randomIterator);
+
     
         if (ok == true) {
             randomIterator = 0;
@@ -207,13 +167,13 @@ private void randomArrayGenerator(){
     private void exitGame(ActionEvent event) {
     
      try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/endScene.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/startScene.fxml"));
         
             Stage stage = (Stage) button.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add("/styles/endStyle.css");
+            scene.getStylesheets().add("/styles/startStyle.css");
             stage.setResizable(false);
-            stage.setTitle("End");
+            stage.setTitle("Start");
             stage.setScene(scene);
             stage.show();
             
@@ -266,7 +226,7 @@ private void randomArrayGenerator(){
         rb1.setToggleGroup(rbGroup);
         rb2.setToggleGroup(rbGroup);
         setScore(0);
-
+        
         
     }    
     
