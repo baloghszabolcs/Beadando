@@ -1,6 +1,5 @@
 package hu.inf.unideb.beadando;
 
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -11,10 +10,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import hu.inf.unideb.beadando.model.TestModel;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,10 +24,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 
-
-
 public class QuizViewController implements Initializable {
-      
+
     @FXML
     Button exitBtn;
     @FXML
@@ -34,75 +34,106 @@ public class QuizViewController implements Initializable {
     Label TimeLbl;
     @FXML
     private RadioButton rb1;
-    
-    @FXML 
+
+    @FXML
     private ProgressBar Pb;
-    
+
     @FXML
     private RadioButton rb2;
-    
+
     @FXML
     private Label questionLabel;
-    @FXML 
+    @FXML
     private ToggleGroup rbGroup;
-    
-    
+
     private TestModel theTest = new TestModel("src/main/java/hu/inf/unideb/beadando/model/quiz.xml");
 
-    private  int questionIterator=0;
-    private int randomIterator=0;
-//   private int MAX_TIME_SEC = 180;
+    private int questionIterator = 0;
+    private int randomIterator = 0;
 
-    private int correctIndex= theTest.getQuestions().get(questionIterator).getCorrectAnswer();
+    private int correctIndex = theTest.getQuestions().get(questionIterator).getCorrectAnswer();
 
-private final int randomNumbersSize = 10;//theTest.getNumberOfQuestions();
+    private final int randomNumbersSize = 10;//theTest.getNumberOfQuestions();
 
     public int getRandomNumbersSize() {
         return randomNumbersSize;
     }
-   
 
+    private ArrayList<Integer> randomSzamok = new ArrayList<>(randomNumbersSize);
 
-private ArrayList<Integer> randomSzamok = new ArrayList<>(randomNumbersSize);
-private void randomArrayGenerator(){
-    Random randomgen = new Random();
-    while (randomSzamok.size() < randomNumbersSize) {
-        int rand = randomgen.nextInt(40);
-        if (!randomSzamok.contains(rand)) {
-            randomSzamok.add(rand);
+    private void randomArrayGenerator() {
+        Random randomgen = new Random();
+        while (randomSzamok.size() < randomNumbersSize) {
+            int rand = randomgen.nextInt(41);
+            if (!randomSzamok.contains(rand)) {
+                randomSzamok.add(rand);
+            }
         }
     }
-//    System.out.println(randomSzamok);  debug
-}
+    private int TIME_SEC = 90; //in seconds
 
+    private void ido() {
 
-    
-    private final double progress = 1.000000/randomNumbersSize;//theTest.getNumberOfQuestions();
+        Task<Void> task = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                SimpleDateFormat simpDate;
+
+                simpDate = new SimpleDateFormat("mm:ss");
+                for (; TIME_SEC >= -1; TIME_SEC--) {
+
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            TimeLbl.setText("" + simpDate.format(TIME_SEC * 1000));
+
+                            if (TIME_SEC == -1) {
+                                exit();
+                                cancel(true);
+                            }
+
+                        }
+
+                    });
+
+                    Thread.sleep(1000);
+
+                }
+                return null;
+            }
+
+        };
+
+        Thread t1 = new Thread(task);
+        t1.setDaemon(true);
+        t1.start();
+
+    }
+
+    private final double progress = 1.000000 / randomNumbersSize;//theTest.getNumberOfQuestions();
     private double progressDinamic = progress;
-    private boolean ok=false;
-    
+    private boolean ok = false;
+
     private static int score;
 
     public static void setScore(int score) {
         QuizViewController.score = score;
     }
 
-    public  int getScore(){
-    
-    return QuizViewController.score;//this.score
+    public int getScore() {
+
+        return QuizViewController.score;//this.score
     }
 
     public void scorePlus() {
-        QuizViewController.score++; 
-        //this.score
+        QuizViewController.score++;
     }
-    
-    
-    
+
     @FXML
     private void next(ActionEvent event) {
         ok = false;
-//        System.out.println("score  " +getScore()); debug
         if (rb1.isSelected() && (correctIndex == 1)) {
 //            System.out.println("helyesValasz");   debug
             if (randomIterator >= getScore()) {
@@ -117,9 +148,7 @@ private void randomArrayGenerator(){
             ok = true;
 
         }
-        
 
-    
         if (ok == true) {
             randomIterator = 0;
             questionIterator = 0;
@@ -162,13 +191,13 @@ private void randomArrayGenerator(){
 
         }
     }
-    
-  @FXML
+
+    @FXML
     private void exitGame(ActionEvent event) {
-    
-     try {
+
+        try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/startScene.fxml"));
-        
+
             Stage stage = (Stage) button.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/startStyle.css");
@@ -176,17 +205,18 @@ private void randomArrayGenerator(){
             stage.setTitle("Start");
             stage.setScene(scene);
             stage.show();
-            
+
         } catch (IOException ex) {
             Logger.getLogger(QuizStartController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+
     }
-    
-    private  void exit(){
-            try {
+
+    private void exit() {
+
+        try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/endScene.fxml"));
-        
+
             Stage stage = (Stage) button.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/endStyle.css");
@@ -194,31 +224,31 @@ private void randomArrayGenerator(){
             stage.setTitle("End");
             stage.setScene(scene);
             stage.show();
-            
+
         } catch (IOException ex) {
             Logger.getLogger(QuizStartController.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-         
-        
-    
-    }
-    
-    private void Question(){
-        
-        questionLabel.setText(theTest.getQuestions().get(questionIterator).getQuestionText());
         }
-    
-    private void Answer() {    
-    rb1.setText(theTest.getQuestions().get(questionIterator).getAnswer1Text());
-    rb2.setText(theTest.getQuestions().get(questionIterator).getAnswer2Text());
-     correctIndex= theTest.getQuestions().get(questionIterator).getCorrectAnswer();
+
     }
-    
+
+    private void Question() {
+
+        questionLabel.setText(theTest.getQuestions().get(questionIterator).getQuestionText());
+    }
+
+    private void Answer() {
+        rb1.setText(theTest.getQuestions().get(questionIterator).getAnswer1Text());
+        rb2.setText(theTest.getQuestions().get(questionIterator).getAnswer2Text());
+        correctIndex = theTest.getQuestions().get(questionIterator).getCorrectAnswer();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        ido();
         randomArrayGenerator();
-        questionIterator= randomSzamok.get(randomIterator);
-        
+        questionIterator = randomSzamok.get(randomIterator);
+
         rbGroup = new ToggleGroup();
         Question();
         Answer();
@@ -226,11 +256,8 @@ private void randomArrayGenerator(){
         rb1.setToggleGroup(rbGroup);
         rb2.setToggleGroup(rbGroup);
         setScore(0);
-        
-        
-    }    
-    
-    
 
-    
+    }
+
 }
+
